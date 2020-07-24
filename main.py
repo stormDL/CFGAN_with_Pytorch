@@ -130,8 +130,8 @@ if __name__ == '__main__':
                           d_batch_size=32,
                           g_lr=0.0001,
                           d_lr=0.0001,
-                          g_steps=24,
-                          d_steps=12,
+                          g_steps=12,
+                          d_steps=6,
                           train_path='dataset/ml-100k/train.csv',
                           test_path='dataset/ml-100k/test.csv',
                           # train_path='dataset/ml-1m/train.csv',
@@ -144,4 +144,5 @@ if __name__ == '__main__':
                           top_k=5)
     epoch_list = [i*10 for i in range(len(precision_list))]
     plt.plot(epoch_list, precision_list)
+    plt.savefig('precision.png')
     plt.show()
