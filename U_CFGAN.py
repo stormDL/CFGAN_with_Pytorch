@@ -142,7 +142,7 @@ def train_CFGAN(train_set, nb_item, epoches, batch_size, nb_zr, nb_pm, alpha, te
             gen_opt.zero_grad()
             loss.backward()
             gen_opt.step()
-        if (e+1) % 1 == 0:
+        if (e+1) % 4 == 0:
             print(e+1, '\t', '=='*24)
             precision, _ = test(gen, test_set_dict, train_set, top_k=top_k)
             epoche_list.append(e+1)
@@ -166,11 +166,11 @@ if __name__ == '__main__':
     train_set, test_set = get_matrix(train_set_dict, test_set_dict, nb_user=nb_user, nb_item=nb_item)
     train_CFGAN(train_set, nb_item, epoches=300, batch_size=32, nb_zr=128, nb_pm=128, alpha=0.1, test_set_dict=test_set_dict, top_k=top_k)
 
-    # # ml1m的数据
+    # # ml1m的数据,超参数与ml100k不一样
     # nb_user=6040
     # nb_item = 3952
     # top_k = 5
     # train_set_dict, test_set_dict = read_ml1m('dataset/ml-1m/ratings.dat')
     # train_set, test_set = get_matrix(train_set_dict, test_set_dict, nb_user=nb_user, nb_item=nb_item)
-    # train_CFGAN(train_set, nb_item, epoches=1000, batch_size=32, nb_zr=128, nb_pm=128, alpha=0.1,
+    # train_CFGAN(train_set, nb_item, epoches=1000, batch_size=128, nb_zr=512, nb_pm=512, alpha=0.1,
     #             test_set_dict=test_set_dict, top_k=top_k)
