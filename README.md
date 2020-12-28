@@ -9,7 +9,7 @@
 ### run
 ```
 cd CFGAN_with_Pytorch
-python U_CFGAN
+python U_CFGAN.py
 ```
 
 ### result
