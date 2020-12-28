@@ -75,8 +75,6 @@ def train_CFGAN(train_set, nb_item, epoches, batch_size, nb_zr, nb_pm, alpha, te
     # 创建优化器
     gen_opt = torch.optim.Adam(gen.parameters(), lr=0.0001)
     dis_opt = torch.optim.Adam(dis.parameters(), lr=0.0001)
-    # 创建判别准则
-    loss_mse = torch.nn.MSELoss(reduction='sum')
     loss_bce = torch.nn.BCELoss()
     # 创建标签
     d_real_label = torch.ones(batch_size, 1, dtype=torch.float)
@@ -86,23 +84,16 @@ def train_CFGAN(train_set, nb_item, epoches, batch_size, nb_zr, nb_pm, alpha, te
     for e in range(epoches):
         #------------------------------------------
         # 判别器的训练
-        # 1. 选择样本的下标
-        # 2. 负采样
-        # 3. 训练数据
         # ------------------------------------------
         dis.train()
         gen.eval()
         for step in range(step_dis):
-            # begin_idx = random.randint(0, len(train_set)-1-batch_size)
-            # condition_vec = torch.tensor(train_set[begin_idx:begin_idx + batch_size], dtype=torch.float)
             idxs = random.sample(range(len(train_set)), batch_size)
             condition_vec = torch.tensor(train_set[idxs], dtype=torch.float)
             # 负采样
             _, idx_pm = select_negative_items(condition_vec, nb_zr, nb_pm)
             idx_pm = torch.tensor(idx_pm)
             eu = condition_vec
-            # 真实的部分
-            # predict1 = copy.deepcopy(condition_vec)
             predict1 = condition_vec
             # 生成的部分
             predict2 = gen(condition_vec) * (eu+idx_pm)
@@ -120,8 +111,6 @@ def train_CFGAN(train_set, nb_item, epoches, batch_size, nb_zr, nb_pm, alpha, te
         gen.train()
         dis.eval()
         for step in range(step_gen):
-            # begin_idx = random.randint(1, len(train_set) - 1 - batch_size)
-            # condition_vec = torch.tensor(train_set[begin_idx:begin_idx + batch_size], dtype=torch.float)
             idxs = random.sample(range(len(train_set)), batch_size)
             condition_vec = torch.tensor(train_set[idxs], dtype=torch.float)
             # 负采样
@@ -158,19 +147,19 @@ def plot_precision(epoche_list, precision_list):
 
 
 if __name__ == '__main__':
-    # ml100k的数据
-    nb_user=943
-    nb_item=1682
-    top_k = 5
-    train_set_dict, test_set_dict = read_ml100k('dataset/ml-100k/u1.base', 'dataset/ml-100k/u1.test', sep='\t', header=None)
-    train_set, test_set = get_matrix(train_set_dict, test_set_dict, nb_user=nb_user, nb_item=nb_item)
-    train_CFGAN(train_set, nb_item, epoches=300, batch_size=32, nb_zr=128, nb_pm=128, alpha=0.1, test_set_dict=test_set_dict, top_k=top_k)
-
-    # # ml1m的数据,超参数与ml100k不一样
-    # nb_user=6040
-    # nb_item = 3952
+    # # ml100k的数据
+    # nb_user=943
+    # nb_item=1682
     # top_k = 5
-    # train_set_dict, test_set_dict = read_ml1m('dataset/ml-1m/ratings.dat')
+    # train_set_dict, test_set_dict = read_ml100k('dataset/ml-100k/u1.base', 'dataset/ml-100k/u1.test', sep='\t', header=None)
     # train_set, test_set = get_matrix(train_set_dict, test_set_dict, nb_user=nb_user, nb_item=nb_item)
-    # train_CFGAN(train_set, nb_item, epoches=1000, batch_size=128, nb_zr=512, nb_pm=512, alpha=0.1,
-    #             test_set_dict=test_set_dict, top_k=top_k)
+    # train_CFGAN(train_set, nb_item, epoches=300, batch_size=32, nb_zr=128, nb_pm=128, alpha=0.1, test_set_dict=test_set_dict, top_k=top_k)
+
+    # ml1m的数据,超参数与ml100k不一样
+    nb_user=6040
+    nb_item = 3952
+    top_k = 5
+    train_set_dict, test_set_dict = read_ml1m('dataset/ml-1m/ratings.dat')
+    train_set, test_set = get_matrix(train_set_dict, test_set_dict, nb_user=nb_user, nb_item=nb_item)
+    train_CFGAN(train_set, nb_item, epoches=1000, batch_size=128, nb_zr=512, nb_pm=512, alpha=1,
+                test_set_dict=test_set_dict, top_k=top_k)
