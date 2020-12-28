@@ -153,6 +153,7 @@ def train_CFGAN(train_set, nb_item, epoches, batch_size, nb_zr, nb_pm, alpha, te
 def plot_precision(epoche_list, precision_list):
     plt.title('precision')
     plt.plot(epoche_list, precision_list, marker='o')
+    plt.savefig('precision_ml100k.png')
     plt.show()
 
 
@@ -163,7 +164,7 @@ if __name__ == '__main__':
     top_k = 5
     train_set_dict, test_set_dict = read_ml100k('dataset/ml-100k/u1.base', 'dataset/ml-100k/u1.test', sep='\t', header=None)
     train_set, test_set = get_matrix(train_set_dict, test_set_dict, nb_user=nb_user, nb_item=nb_item)
-    train_CFGAN(train_set, nb_item, epoches=1000, batch_size=32, nb_zr=128, nb_pm=128, alpha=0.1, test_set_dict=test_set_dict, top_k=top_k)
+    train_CFGAN(train_set, nb_item, epoches=300, batch_size=32, nb_zr=128, nb_pm=128, alpha=0.1, test_set_dict=test_set_dict, top_k=top_k)
 
     # # ml1m的数据
     # nb_user=6040

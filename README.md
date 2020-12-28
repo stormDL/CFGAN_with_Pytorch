@@ -15,3 +15,4 @@ python U_CFGAN
 ### result
 dataset:ml100k
 
+![precision](./precision_ml100k.png)
