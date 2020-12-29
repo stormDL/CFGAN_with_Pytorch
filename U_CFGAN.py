@@ -161,5 +161,5 @@ if __name__ == '__main__':
     top_k = 5
     train_set_dict, test_set_dict = read_ml1m('dataset/ml-1m/ratings.dat')
     train_set, test_set = get_matrix(train_set_dict, test_set_dict, nb_user=nb_user, nb_item=nb_item)
-    train_CFGAN(train_set, nb_item, epoches=1000, batch_size=128, nb_zr=512, nb_pm=512, alpha=1,
+    train_CFGAN(train_set, nb_item, epoches=2000, batch_size=128, nb_zr=512, nb_pm=512, alpha=1,
                 test_set_dict=test_set_dict, top_k=top_k)
